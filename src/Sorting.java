@@ -1,7 +1,10 @@
 import javafx.scene.chart.XYChart;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
+
 
 public class Sorting {
 
@@ -19,23 +22,57 @@ public class Sorting {
         return arr;
     }
 
-    public static void generate_test(int n){
-        OutputStream out = null;
+    public static void generate_test(int n) {
+        int[] arr = new int[n];
         Random rand = new Random();
         int x;
+        for (int i = 0; i < arr.length; i++) {
+            x = rand.nextInt(n) + 1;
+            arr[i] = x;
+        }
+        writeToFile(arr, "test_data.txt");
+
+    }
+
+    public static void writeToFile(int[] arr, String filename) {
+        OutputStream out;
+        String desktopPath = System.getProperty("user.home") + File.separator + "Desktop/" + filename;
         try {
-            out = new FileOutputStream("test_data.txt");
+            out = new FileOutputStream(desktopPath);
             PrintStream outFile = new PrintStream(out);
-            for (int i = 0; i < n; i++) {
-                x = rand.nextInt(n) + 1;
-                outFile.println(x);
+            for (int i = 0; i < arr.length; i++) {
+                outFile.println(arr[i]);
             }
             out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int[] readFromFile() throws FileNotFoundException {
+        String fileName = System.getProperty("user.home") + File.separator + "Desktop/test_data.txt";
+        File file = new File(fileName);
+        int[] input = new int[10000];
+        int size = 0;
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextInt()) {
+            input[size] = scanner.nextInt();
+            size++;
+        }
+        return Arrays.copyOf(input, size);
+    }
+
+    public static void sort_test(String algo) throws FileNotFoundException {
+        int[] data = readFromFile();
+        switch (algo) {
+            case "Insertion" -> Sorting.insertion_sort(data, data.length);
+            case "Merge" -> Sorting.mergeSort(data, 0, data.length - 1);
+            case "Bubble" -> Sorting.bubbleSort(data, data.length);
+            case "Quick" -> Sorting.quicksort(data, 0, data.length - 1);
+            case "Heap" -> Sorting.heapsort(data, data.length);
+        }
+        writeToFile(data, "test_data_sorted.txt");
+
     }
 
     private static void swap(int[] arr, int first, int second) {
@@ -128,9 +165,10 @@ public class Sorting {
         for (int i = 0; i < length - 1; i++) {
             for (int j = 0; j < length - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
-                    swap(arr,j,j+1);
-                    steps ++;
+                    swap(arr, j, j + 1);
+                    steps++;
                 }
+                steps++;
             }
         }
         return steps;
@@ -182,7 +220,7 @@ public class Sorting {
         } else {
             largest = i;
         }
-        steps += 2;
+        steps++;
         if (r < s && arr[r] > arr[largest]) {
             largest = r;
             steps++;
@@ -190,10 +228,9 @@ public class Sorting {
         steps++;
         if (largest != i) {
             swap(arr, i, largest);
-            max_heapify(arr, largest, s);
-            steps += 2;
+            steps++;
+            steps += max_heapify(arr, largest, s);
         }
-        steps++;
         return steps;
     }
 
@@ -201,7 +238,6 @@ public class Sorting {
         int steps = 0;
         for (int i = s / 2; i >= 0; i--) {
             steps += max_heapify(arr, i, s);
-            steps++;
         }
         return steps;
     }
@@ -212,162 +248,53 @@ public class Sorting {
         for (int i = s - 1; i >= 1; i--) {
             swap(arr, 0, i);
             s--;
+            steps += 2;
             steps += max_heapify(arr, 0, s);
-            steps += 3;
         }
         return steps;
     }
 
-    public static XYChart.Series generate_insertion_series(int max_size, int step) {
-        XYChart.Series<String, Number> series_insertion = new XYChart.Series<>();
-        series_insertion.setName("Insertion Sort");
+    public static XYChart.Series<String,Number> generate_series(String type, int max_size, int step) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        switch (type) {
+            case "Insertion" -> series.setName("Insertion Sort");
+            case "Merge" -> series.setName("Merge Sort");
+            case "Bubble" -> series.setName("Bubble Sort");
+            case "Quick" -> series.setName("Quick Sort");
+            case "Heap" -> series.setName("Heap Sort");
+            case "Expo" -> series.setName("N^2");
+            case "n log" -> series.setName("n log(n)");
+        }
 
         int[] arr;
-        int n;
-        for (int i = 1; i < max_size; ) {
+        double n = 0;
+        int i = 0;
+        while (true) {
             arr = Sorting.generate(i);
-            n = Sorting.insertion_sort(arr, i);
-            series_insertion.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
-        }
 
-        return series_insertion;
-    }
-
-    public static XYChart.Series generate_merge_series(int max_size, int step) {
-        XYChart.Series<String, Number> series_merge = new XYChart.Series<>();
-        series_merge.setName("Merge Sort");
-
-        int[] arr;
-        int n;
-        for (int i = 1; i < max_size; ) {
-            arr = Sorting.generate(i);
-            n = Sorting.mergeSort(arr, 0, i - 1);
-            series_merge.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
-        }
-        return series_merge;
-    }
-
-    public static XYChart.Series generate_bubble_series(int max_size, int step) {
-        XYChart.Series<String, Number> series_bubble = new XYChart.Series<>();
-        series_bubble.setName("Bubble Sort");
-
-        int[] arr;
-        int n;
-        for (int i = 1; i < max_size; ) {
-            arr = Sorting.generate(i);
-            n = Sorting.bubbleSort(arr, i);
-            series_bubble.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
-        }
-        return series_bubble;
-    }
-
-    public static XYChart.Series generate_quick_series(int max_size, int step) {
-        XYChart.Series<String, Number> series_quick = new XYChart.Series<>();
-        series_quick.setName("Quick Sort");
-
-        int[] arr;
-        int n;
-        for (int i = 1; i < max_size; ) {
-            arr = Sorting.generate(i);
-            n = Sorting.quicksort(arr, 0, i - 1);
-            series_quick.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
-        }
-        return series_quick;
-    }
-
-    public static XYChart.Series generate_heap_series(int max_size, int step) {
-        XYChart.Series<String, Number> series_heap = new XYChart.Series<>();
-        series_heap.setName("Heap Sort");
-
-        int[] arr;
-        int n;
-        for (int i = 1; i < max_size; ) {
-            arr = Sorting.generate(i);
-            n = Sorting.heapsort(arr, i);
-            series_heap.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
-        }
-        return series_heap;
-    }
-
-    public static XYChart.Series generate_expo_series(int max_size, int step) {
-        XYChart.Series<String, Number> series_expo = new XYChart.Series<>();
-        series_expo.setName("N^2");
-
-        int n;
-        for (int i = 1; i < max_size; ) {
-            n = i * i;
-            series_expo.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
-        }
-        return series_expo;
-    }
-
-    public static XYChart.Series generate_n_log_series(int max_size, int step) {
-        XYChart.Series<String, Number> series_expo = new XYChart.Series<>();
-        series_expo.setName("n log(n)");
-        double n;
-        for (int i = 1; i < max_size; ) {
-            n = i * (Math.log(i) / Math.log(2));
-            series_expo.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
-        }
-        return series_expo;
-    }
-
-
-    //TODO
-    public static XYChart.Series generate_series(String type, int max_size, int step) {
-        XYChart.Series<String, Number> series_expo = new XYChart.Series<>();
-        series_expo.setName("n log(n)");
-
-        int[] arr;
-        double n;
-        for (int i = 1; i < max_size; ) {
-            n = i * (Math.log(i) / Math.log(2));
-            switch(type){
-                case "Insertion":
-                    arr = Sorting.generate(i);
-
-                    break;
-                case "Merge":
-                    arr = Sorting.generate(i);
-
-                    break;
-                case "Bubble":
-                    arr = Sorting.generate(i);
-
-                    break;
-                case "Quick":
-                    arr = Sorting.generate(i);
-
-                    break;
-                case "Heap":
-
-                    break;
-                case "Expo":
-
-                    break;
-                case "n log":
-
-                    break;
+            switch (type) {
+                case "Insertion" -> n = Sorting.insertion_sort(arr, i);
+                case "Merge" -> n = Sorting.mergeSort(arr, 0, i - 1);
+                case "Bubble" -> n = Sorting.bubbleSort(arr, i);
+                case "Quick" -> n = Sorting.quicksort(arr, 0, i - 1);
+                case "Heap" -> n = Sorting.heapsort(arr, i);
+                case "Expo" -> n = i * i;
+                case "n log" -> {
+                    if (i == 0) {
+                        n = 0;
+                        break;
+                    }
+                    n = i * (Math.log(i) / Math.log(2));
+                }
             }
-            series_expo.getData().add(new XYChart.Data<>(String.valueOf(i), n));
-            if (i + step <= max_size) i += step;
-            else i = max_size;
+            series.getData().add(new XYChart.Data<>(String.valueOf(i), n));
+            if (i < max_size) {
+                i += step;
+                if (i > max_size) i = max_size;
+            } else break;
         }
-        return series_expo;
+        return series;
     }
 
 }

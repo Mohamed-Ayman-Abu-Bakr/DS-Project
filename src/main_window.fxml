@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="596.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
       <TextField fx:id="txt_num_elements" layoutX="39.0" layoutY="147.0" text="10000" />
-      <Button fx:id="btn_generate" layoutX="219.0" layoutY="147.0" mnemonicParsing="false" onAction="#generate" prefWidth="100.0" text="Generate" />
+      <Button layoutX="219.0" layoutY="147.0" mnemonicParsing="false" onAction="#generate" prefWidth="100.0" text="Generate" />
+      <Button layoutX="219.0" layoutY="189.0" mnemonicParsing="false" onAction="#sort" prefWidth="100.0" text="Sort" />
       <TextField fx:id="txt_step" layoutX="39.0" layoutY="230.0" text="50" />
       <Text layoutX="44.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Elements" />
       <Text layoutX="44.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Step" />
@@ -21,7 +21,7 @@
       <CheckBox fx:id="chk_heap" layoutX="460.0" layoutY="228.0" mnemonicParsing="false" text="Heap Sort" />
       <CheckBox fx:id="chk_expo" layoutX="460.0" layoutY="263.0" mnemonicParsing="false" text="n^2" />
       <CheckBox fx:id="chk_n_log" layoutX="460.0" layoutY="298.0" mnemonicParsing="false" text="n log (n)" />
-      <Button fx:id="btn_plot" layoutX="219.0" layoutY="230.0" mnemonicParsing="false" onAction="#plot" prefWidth="100.0" text="Plot" />
+      <Button layoutX="219.0" layoutY="230.0" mnemonicParsing="false" onAction="#plot" prefWidth="100.0" text="Plot" />
       <Button layoutX="64.0" layoutY="342.0" mnemonicParsing="false" onAction="#clear_graph" prefWidth="100.0" text="Clear Graph" />
       <Button layoutX="458.0" layoutY="342.0" mnemonicParsing="false" onAction="#clear_selection" prefWidth="100.0" text="Clear Selection" />
    </children>
