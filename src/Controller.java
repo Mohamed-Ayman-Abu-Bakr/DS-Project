@@ -65,7 +65,7 @@ public class Controller {
             return;
         }
         Sorting.generate_test(size);
-        show_Message("Test File generated successfully, you can find it in \"test_data.txt\" on the desktop");
+        show_Message("Test File generated successfully\nYou can find it in \"test_data.txt\" on the desktop");
     }
 
     void show_Graph_Window() throws IOException{
@@ -78,6 +78,7 @@ public class Controller {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.setTitle("Plot");
+        stage.setMaximized(true);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
@@ -181,9 +182,9 @@ public class Controller {
         if(algo!=null)
         try {
             Sorting.sort_test(algo);
-            show_Message("Test File sorted successfully, you can find the result in \"test_data_sorted.txt\" on the desktop");
+            show_Message("Test File sorted successfully\nYou can find the result in \"test_data_sorted.txt\" on the desktop");
         } catch (FileNotFoundException e) {
-            show_Error("The file \"test_data.txt\" doesn't exist, Check that it exists and try again.");
+            show_Error("The file \"test_data.txt\" doesn't exist\nCheck that it exists and try again.");
         }
     }
 
