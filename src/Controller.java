@@ -8,7 +8,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -66,6 +65,7 @@ public class Controller {
             return;
         }
         Sorting.generate_test(size);
+        show_Message("Test File generated successfully, you can find it in \"test_data.txt\" on the desktop");
     }
 
     void show_Graph_Window() throws IOException{
@@ -84,6 +84,7 @@ public class Controller {
 
     @FXML
     void plot() throws IOException {
+        clear_graph();
         int size;
         int step;
         try{
@@ -124,8 +125,7 @@ public class Controller {
         series_heap = null;
         series_expo = null;
         series_n_log = null;
-
-        show_Message("Graph cleared successfully");
+        //show_Message("Graph cleared successfully");
     }
 
     @FXML

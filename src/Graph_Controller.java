@@ -14,6 +14,7 @@ public class Graph_Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        chrt_chart.setCreateSymbols(false);
         if (series_insertion != null) chrt_chart.getData().add(series_insertion);
         if (series_merge != null) chrt_chart.getData().add(series_merge);
         if (series_bubble != null) chrt_chart.getData().add(series_bubble);

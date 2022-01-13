@@ -22,7 +22,6 @@
       <CheckBox fx:id="chk_expo" layoutX="460.0" layoutY="263.0" mnemonicParsing="false" text="n^2" />
       <CheckBox fx:id="chk_n_log" layoutX="460.0" layoutY="298.0" mnemonicParsing="false" text="n log (n)" />
       <Button layoutX="219.0" layoutY="230.0" mnemonicParsing="false" onAction="#plot" prefWidth="100.0" text="Plot" />
-      <Button layoutX="64.0" layoutY="342.0" mnemonicParsing="false" onAction="#clear_graph" prefWidth="100.0" text="Clear Graph" />
       <Button layoutX="458.0" layoutY="342.0" mnemonicParsing="false" onAction="#clear_selection" prefWidth="100.0" text="Clear Selection" />
    </children>
 </AnchorPane>
